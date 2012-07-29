@@ -255,7 +255,7 @@ LOCATE Cons.CommandModeLine, 1:  LINE INPUT "* ", RawCommand
 
                                             ' putting whole command in
                                             ' RawCommand
-IF RawCommand = "q" THEN                    '(if command is q for quit)
+if RawCommand = "q" then                    '(if command is q for quit)
     ExitCLED                                     '-terminate editor
 elseif RawCommand = "version" then
      print "CLED Version "; CLED_VERSION; "   (";CLED_PLATFORM;" ";__FB_SIGNATURE__;")"
@@ -270,43 +270,43 @@ elseif RawCommand = "version" then
      print "See the file LICENSE.TXT, included with this distribution, for details"
      print "pertaining to the terms of legal usage for this software."
      WaitOutput
-ELSEIF RawCommand = "v" THEN                '(if command is v for view)
-    FOR i = 1 TO LineCount                  '-loop for the number of lines
+elseif RawCommand = "v" then                '(if command is v for view)
+    for i = 1 TO LineCount                  '-loop for the number of lines
                                             ' in the edit buffer
-        PRINT i; ": "; EditBuffer(i)        '-display the line # with line
-    NEXT
-    GOTO PromptArea                         '-return to prompt
-ELSEIF RawCommand = "s" THEN
-    OPEN InFile FOR OUTPUT AS #1
+        print i; ": "; EditBuffer(i)        '-display the line # with line
+    next
+    goto PromptArea                         '-return to prompt
+elseif RawCommand = "s" THEN
+    open InFile for output as #1
 
-    FOR i = 1 TO LineCount
-        PRINT #1, EditBuffer(i)
-    NEXT i
+    for i = 1 TO LineCount
+        print #1, EditBuffer(i)
+    next i
 
-    CLOSE #1
+    close #1
 
-    GOTO PromptArea
-ELSEIF LEFT$(RawCommand, 4) = "page" THEN
+    goto PromptArea
+elseif left(RawCommand, 4) = "page" THEN
     pageCmd$ = MID$(RawCommand, 6)
     SELECT CASE pageCmd$
         CASE "up"
-            StartDisplay = StartDisplay - 22
+            StartDisplay = StartDisplay - Cons.MaxLines
             IF StartDisplay < 1 THEN
-                VIEW PRINT 24 TO 25
-                LOCATE 24, 1: COLOR 12, 0
+                view print Cons.Height to Cons.Height
+                locate Cons.Height, 1: COLOR 12, 0
                 PRINT "ALREADY AT TOP OF FILE";
                 BEEP
                 SLEEP 1
-                LOCATE 24, 1
+                LOCATE Cons.Height, 1
                 PRINT "                      ";
                 StartDisplay = 1
             END IF
         CASE "down"
-            StartDisplay = StartDisplay + 22
+            StartDisplay = StartDisplay + Cons.MaxLines
         CASE "top"
             StartDisplay = 1
         CASE "bottom"
-            StartDisplay = LineCount - 21
+            StartDisplay = LineCount - Cons.MaxLines - 1
     END SELECT
     GOTO PromptArea
 ELSEIF LEFT$(RawCommand, 4) = "line" THEN
@@ -318,7 +318,7 @@ ELSEIF LEFT$(RawCommand, 4) = "line" THEN
             StartDisplay = StartDisplay + 1
     END SELECT
     GOTO PromptArea
-ELSEIF RawCommand = "show snarf" THEN
+ELSEIF RawCommand = "show copy" THEN
     FOR i = 0 TO CopyBufferLines - 1
         PRINT LTRIM$(RTRIM$(STR$(i + 1))); ":  "; CopyBuffer(i)
     NEXT
@@ -640,7 +640,6 @@ NEXT
 
 GOTO PromptArea                             '-return to command prompt
                                             '-end of source file
-'>>> END OF MODULE NTED.BAS <<<'
 END
 
 ErrHandler:
