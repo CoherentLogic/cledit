@@ -1111,10 +1111,6 @@ SUB ShiftLinesDown (FromLine AS INTEGER, NumLines AS INTEGER)
         bufIdx = bufIdx + 1
     NEXT i
 
-    'FOR i = 1 TO ShiftBufSize
-    '    PRINT szTrimText(STR$(i)); ":  "; ShiftBuffer(i)
-    'NEXT i
-
     OriginalBufferSize = LineCount
     ExpandBuffer NumLines
 
