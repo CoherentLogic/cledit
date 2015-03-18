@@ -1,0 +1,1 @@
+This is the CLD text editor. Still a work in progress.
